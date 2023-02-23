@@ -24,34 +24,35 @@
         var addbtn = document.getElementById('addbtn')
         addbtn.addEventListener('click',savedatatocrud)
 
-function savedatatocrud(event){
+async function savedatatocrud(event){
 event.preventDefault()
+try {
 let nm = document.getElementById('pname').value
 let pr = parseInt(document.getElementById('sellprice').value)
 
-axios.post('https://crudcrud.com/api/f6708b3227074a4a9ea5b99314d5d2b0/aps',obj={
+let resolve = await axios.post('https://crudcrud.com/api/0418af577688480ea744d689c6e5db0d/aps',obj={
       'price': pr,
   'name': nm
     })
-.then((resolve)=>{
+console.log(resolve)
     document.getElementById('sellprice').value=''
     document.getElementById('pname').value=''
     shownewuseronscreen(resolve.data)        
     total+=resolve.data.price
     gettotal(total)
 
-}).catch((err)=>{
-  console.log(err)
-})   
 // window.addEventListener('DOMContentLoaded',()=>
-
+}catch(err){
+    console.log(err)
+}
 }
 
 
 var total =0
-function get(){
-axios.get('https://crudcrud.com/api/f6708b3227074a4a9ea5b99314d5d2b0/aps')
-.then((res)=>{
+async function get(){
+    try{
+let res = await axios.get('https://crudcrud.com/api/0418af577688480ea744d689c6e5db0d/aps')
+
     var data = res.data
     for(var i=0;i<res.data.length;i++){
     //    console.log(res.data[i])
@@ -59,19 +60,19 @@ axios.get('https://crudcrud.com/api/f6708b3227074a4a9ea5b99314d5d2b0/aps')
         total+=data[i].price        
     }
     gettotal(total)
-    
+}catch(err){
+    console.log(err)
+}
    
 
-}).catch((rej)=>{
-    console.log('rejected')
-})
 
 
 
 }
 
 
-    function shownewuseronscreen(user){
+    async function shownewuseronscreen(user){
+        
     //    document.getElementById('sellprice')=''
     //    document.getElementById('pname')=''
        const parentNode = document.getElementById('list')
@@ -81,17 +82,17 @@ axios.get('https://crudcrud.com/api/f6708b3227074a4a9ea5b99314d5d2b0/aps')
     }
     console.log(document.getElementById('body'))
   
-    function deleteuser(userid,userprice){
+   async function deleteuser(userid,userprice){
+        try{ 
         
-        
-        axios.delete(`https://crudcrud.com/api/f6708b3227074a4a9ea5b99314d5d2b0/aps/${userid}`)
-        .then((reso)=>{
+       let reso = await axios.delete(`https://crudcrud.com/api/0418af577688480ea744d689c6e5db0d/aps/${userid}`)
             removeuserfromscreen(userid)
-            total-=userprice
-           console.log(total)
-        }).catch((rej)=>{
-            console.log(rej)
-        })
+           total-=userprice
+           gettotal(total)
+     }catch(err){
+        console.log(err)
+     }   
+           
     }
     
 
